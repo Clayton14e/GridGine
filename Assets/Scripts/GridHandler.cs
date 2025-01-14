@@ -83,7 +83,9 @@ public class GridHandler : MonoBehaviour
         if(index > 0){
             // Parent Selection Scope Allows Randomized Path Generation
             // Can remove parent from statement and add functionality for squared grid
-            blockList[index].transform.parent.position += (randomPosition())/2;
+            Vector3 blockPos = randomPosition();
+            blockList[index].transform.parent.position += (blockPos);
+            blockList[index].GetComponent<GridBlock>().setRotation(blockPos);
         }
     }
     private Vector3 randomPosition(){
@@ -100,6 +102,14 @@ public class GridHandler : MonoBehaviour
         }
         // Add Control for forcing vertical and horizontal placement only (Exclude diagonals)
         // If x&y != 0 random 1-2 if1thenx0 if2theny0
+        if(x != 0 && y != 0){
+            int shuffle = Random.Range(1,3);
+            if(shuffle == 1){
+                x = 0;
+            } else if(shuffle == 2){
+                y=0;
+            }
+        }
         return new Vector3(x,y,0);
     }
 }
