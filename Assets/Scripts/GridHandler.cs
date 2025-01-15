@@ -7,9 +7,11 @@ using TMPro;
 
 public class GridHandler : MonoBehaviour
 {
+    public GameObject debugText;
     private GameObject gridBlock;
     List<GameObject> gridBlocks;
     List<string> stringList;
+    List<Vector3> positionList;
     private int gridSize, gridLimit, gridMinimum, randomAttempts;
     private Vector3 blockSpawnPos;
     private bool isReady, isDone;
@@ -19,10 +21,11 @@ public class GridHandler : MonoBehaviour
         gridBlock = Resources.Load("GridBlock") as GameObject;
         gridBlocks = new List<GameObject>();
         stringList = new List<string>();
+        positionList = new List<Vector3>();
     }
     void Start()
     {
-        Debug.Log(gridSizeInput);
+        //Debug.Log(gridSizeInput);
         randomAttempts = 0;
         isDone = false;
         isReady = false;
@@ -43,6 +46,7 @@ public class GridHandler : MonoBehaviour
                 gridBlocks.Add(block);
                 DistributeBlocks(gridBlocks,i);
                 if(i >= gridLimit){
+                    //debugText.GetComponent<Text>().text = positionList[i].ToString();
                     isDone = true;
                     isReady = false;
                 }
@@ -63,7 +67,7 @@ public class GridHandler : MonoBehaviour
     }
     public void ChangeSize()
     {
-        Debug.Log(gridSizeInput.GetComponent<TMP_InputField>().text);
+       //Debug.Log(gridSizeInput.GetComponent<TMP_InputField>().text);
         stringList.Add(gridSizeInput.GetComponent<TMP_InputField>().text);
         int size = 0;
         int[] numArr = new int[stringList.Count];
@@ -71,7 +75,7 @@ public class GridHandler : MonoBehaviour
             numArr[i]=int.Parse(string.Join("",stringList[i]));
             size = numArr[i];
         }
-        Debug.Log(size);
+        //Debug.Log(size);
         gridLimit = size;
     }
     private void DistributeBlocks(List<GameObject> blockList, int index)
@@ -79,6 +83,8 @@ public class GridHandler : MonoBehaviour
         // Default first block to center
         if(index == 0){
             blockList[index].transform.position = new Vector3(0,0,0);
+            positionList.Add(blockList[index].transform.parent.position);
+            
         }
         if(index > 0){
             // Parent Selection Scope Allows Randomized Path Generation
@@ -86,7 +92,16 @@ public class GridHandler : MonoBehaviour
             Vector3 blockPos = randomPosition();
             blockList[index].transform.parent.position += (blockPos);
             blockList[index].GetComponent<GridBlock>().setRotation(blockPos);
+            positionList.Add(blockList[index].transform.parent.position);
         }
+        
+        foreach(Vector3 v3 in positionList){
+            Debug.Log(blockList[index].transform.parent.position);
+            if(blockList[index].transform.parent.position == v3){
+            Debug.Log("Overlap");
+            // Reset Position
+            }
+        } 
     }
     private Vector3 randomPosition(){
         int x, y;
@@ -110,6 +125,7 @@ public class GridHandler : MonoBehaviour
                 y=0;
             }
         }
+        
         return new Vector3(x,y,0);
     }
 }

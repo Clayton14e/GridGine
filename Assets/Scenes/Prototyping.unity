@@ -1431,6 +1431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d32e899f3d531a4689cf9336c30cb44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugText: {fileID: 0}
   gridSizeInput: {fileID: 331889979}
 --- !u!4 &1736094428
 Transform:
@@ -1729,6 +1730,10 @@ PrefabInstance:
     - target: {fileID: 4413433827921972780, guid: 19e06c88ce14c5e428b8cfaea3cdbaab, type: 3}
       propertyPath: m_Name
       value: GridBlock
+      objectReference: {fileID: 0}
+    - target: {fileID: 4413433827921972780, guid: 19e06c88ce14c5e428b8cfaea3cdbaab, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

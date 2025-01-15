@@ -28,22 +28,22 @@ public class GridBlock : MonoBehaviour
         switch (blockPos){
             // X -1
             case 0:  
-            Debug.Log("Position Left");
+            //Debug.Log("Position Left");
             gameObject.transform.Rotate(0,0, 90);
             break;
             // X 1
             case 1:
-            Debug.Log("Position Right");
+            //Debug.Log("Position Right");
             gameObject.transform.Rotate(0,0, 270);
             break;
             // Y -1
             case 2:
-            Debug.Log("Position Bottom");
+            //Debug.Log("Position Bottom");
             gameObject.transform.Rotate(0,0, 180);
             break;
             // Y 1
             case 3:
-            Debug.Log("Position Top");
+            //Debug.Log("Position Top");
             break;
             // CENTERED
             default:
