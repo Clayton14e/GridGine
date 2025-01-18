@@ -7,6 +7,7 @@ using TMPro;
 
 public class GridHandler : MonoBehaviour
 {
+    private float loadTime;
     public GameObject debugText;
     private GameObject gridBlock;
     List<GameObject> gridBlocks;
@@ -24,12 +25,13 @@ public class GridHandler : MonoBehaviour
         positionList = new List<Vector3>();
     }
     void Start()
-    {
+    { 
+        loadTime=0;
         //Debug.Log(gridSizeInput);
         randomAttempts = 0;
         isDone = false;
         isReady = false;
-        gridLimit = 20;
+        gridLimit = 0;
         if(gridBlock == null){
             gridBlock = Resources.Load("GridBlock.prefab") as GameObject;
         }
@@ -40,12 +42,14 @@ public class GridHandler : MonoBehaviour
     {
         // Control for CreateGrid
         if(isReady){
+            loadTime += Time.deltaTime;
             for(int i = 0; i <= gridLimit; i++){
                 GameObject block = GameObject.Instantiate(gridBlock, blockSpawnPos, transform.rotation, gameObject.transform);
                 Debug.Log(i);
                 gridBlocks.Add(block);
                 DistributeBlocks(gridBlocks,i);
                 if(i >= gridLimit){
+                    //Debug.Log("Load Time:" + loadTime +"s");
                     //debugText.GetComponent<Text>().text = positionList[i].ToString();
                     isDone = true;
                     isReady = false;
@@ -62,8 +66,12 @@ public class GridHandler : MonoBehaviour
     }
     public void Reset()
     {
-        gridBlocks = new List<GameObject>();
+        stringList.Clear();
+        gridBlocks.Clear();
+        gridLimit = 0;
+        //gridBlocks = new List<GameObject>();
         isDone = false;
+        gridSizeInput.GetComponent<TMP_InputField>().text= "";
     }
     public void ChangeSize()
     {
@@ -92,16 +100,15 @@ public class GridHandler : MonoBehaviour
             Vector3 blockPos = randomPosition();
             blockList[index].transform.parent.position += (blockPos);
             blockList[index].GetComponent<GridBlock>().setRotation(blockPos);
+            foreach(Vector3 v3 in positionList){
+                Debug.Log(blockList[index].transform.parent.position + "vs" + v3);
+                if(blockList[index].transform.parent.position.x == v3.x && blockList[index].transform.parent.position.y == v3.y){
+                    Debug.Log("Overlap");
+                    // Reset Position
+                }
             positionList.Add(blockList[index].transform.parent.position);
+            }     
         }
-        
-        foreach(Vector3 v3 in positionList){
-            Debug.Log(blockList[index].transform.parent.position);
-            if(blockList[index].transform.parent.position == v3){
-            Debug.Log("Overlap");
-            // Reset Position
-            }
-        } 
     }
     private Vector3 randomPosition(){
         int x, y;
