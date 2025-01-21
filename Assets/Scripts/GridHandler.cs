@@ -95,19 +95,33 @@ public class GridHandler : MonoBehaviour
             
         }
         if(index > 0){
-            // Parent Selection Scope Allows Randomized Path Generation
-            // Can remove parent from statement and add functionality for squared grid
+            // Set random block position as modifier for Grid Handler
             Vector3 blockPos = randomPosition();
+            // Loop through block list and compare block positions to v3 list positions
+            for(int i = 0; i < index; i++){
+                foreach(Vector3 v3 in positionList){
+                    // If would be overlapping - Do something
+                    if(blockList[index].transform.parent.position + blockPos == v3){
+                        bool isOverlap = true;
+                        // Reset Position to prevent overlap
+                        Debug.Log("Overlap Occurred - Repositioning");         
+                        do{
+                            blockPos = randomPosition();
+                            if(blockList[index].transform.parent.position + blockPos != v3){
+                                isOverlap = false;
+                            }
+                            }while(isOverlap);
+                    } else if(blockList[index].transform.parent.position + blockPos != v3){
+                        // If position not taken move handler
+                        Debug.Log("No Overlap - Tile Placed");
+                    } 
+                }
+             }
+            // Setting sta after loop for each block
             blockList[index].transform.parent.position += (blockPos);
             blockList[index].GetComponent<GridBlock>().setRotation(blockPos);
-            foreach(Vector3 v3 in positionList){
-                Debug.Log(blockList[index].transform.parent.position + "vs" + v3);
-                if(blockList[index].transform.parent.position.x == v3.x && blockList[index].transform.parent.position.y == v3.y){
-                    Debug.Log("Overlap");
-                    // Reset Position
-                }
-            positionList.Add(blockList[index].transform.parent.position);
-            }     
+            positionList.Add(blockList[index].transform.parent.position); 
+              
         }
     }
     private Vector3 randomPosition(){
