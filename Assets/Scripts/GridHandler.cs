@@ -8,7 +8,6 @@ using TMPro;
 public class GridHandler : MonoBehaviour
 {
     private float loadTime;
-    public GameObject debugText;
     private GameObject gridBlock;
     List<GameObject> gridBlocks;
     List<string> stringList;
@@ -27,7 +26,6 @@ public class GridHandler : MonoBehaviour
     void Start()
     { 
         loadTime=0;
-        //Debug.Log(gridSizeInput);
         randomAttempts = 0;
         isDone = false;
         isReady = false;
@@ -57,7 +55,6 @@ public class GridHandler : MonoBehaviour
             }
         }
     }
-
     public void CreateGrid()
     {
         if(isReady == false && isDone == false){
@@ -69,13 +66,12 @@ public class GridHandler : MonoBehaviour
         stringList.Clear();
         gridBlocks.Clear();
         gridLimit = 0;
-        //gridBlocks = new List<GameObject>();
         isDone = false;
         gridSizeInput.GetComponent<TMP_InputField>().text= "";
     }
     public void ChangeSize()
     {
-       //Debug.Log(gridSizeInput.GetComponent<TMP_InputField>().text);
+       // Takes input text and adds to string list for parsing
         stringList.Add(gridSizeInput.GetComponent<TMP_InputField>().text);
         int size = 0;
         int[] numArr = new int[stringList.Count];
@@ -145,8 +141,7 @@ public class GridHandler : MonoBehaviour
             } else if(shuffle == 2){
                 y=0;
             }
-        }
-        
+        } 
         return new Vector3(x,y,0);
     }
 }
