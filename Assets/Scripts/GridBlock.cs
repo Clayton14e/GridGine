@@ -6,7 +6,7 @@ public class GridBlock : MonoBehaviour
 {
     private int blockPos;
     private GameObject[] tiles;
-
+    private List<SpawnableObjects> s_Scripts;
     // Start is called before the first frame update
     void Start()
     {

@@ -7,6 +7,7 @@ using TMPro;
 
 public class GridHandler : MonoBehaviour
 {
+    public TMP_Dropdown dropdown;
     private float loadTime;
     private GameObject gridBlock;
     List<GameObject> gridBlocks;
@@ -145,5 +146,25 @@ public class GridHandler : MonoBehaviour
             }
         } 
         return new Vector3(x,y,0);
+    }
+
+    public void MapColor(){
+        switch(dropdown.value){
+        case 0:
+        foreach(GameObject block in gridBlocks){
+            block.GetComponent<SpriteRenderer>().color = Color.green;
+        }
+        break;
+        case 1:
+        foreach(GameObject block in gridBlocks){
+            block.GetComponent<SpriteRenderer>().color = Color.magenta;
+        }
+        break;
+        case 2:
+        foreach(GameObject block in gridBlocks){
+            block.GetComponent<SpriteRenderer>().color = Color.blue;
+        }
+        break;
+        }
     }
 }
