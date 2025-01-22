@@ -105,12 +105,14 @@ public class GridHandler : MonoBehaviour
                             blockPos = randomPosition();
                             if(blockList[index].transform.parent.position + blockPos != v3){
                                 isOverlap = false;
+                                break;
                             }
                             }while(isOverlap);
                     } else if(blockList[index].transform.parent.position + blockPos != v3){
                         // If position not taken move handler
                         Debug.Log("No Overlap - Tile Placed");
-                    } 
+                        continue;
+                    }  
                 }
              }
             // Setting sta after loop for each block

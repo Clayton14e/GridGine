@@ -375,6 +375,7 @@
 "Assets/Scripts/CameraControl.cs"
 "Assets/Scripts/GridBlock.cs"
 "Assets/Scripts/GridHandler.cs"
+"Assets/Scripts/PlayerControl.cs"
 -langversion:9.0
 /deterministic
 /optimize+

@@ -13,7 +13,7 @@ public class CameraControl : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        float y = Input.GetAxis("Vertical");
+        float y = Input.mouseScrollDelta.y;
         gameObject.GetComponent<Camera>().orthographicSize -= y;
     }
 }
