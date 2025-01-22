@@ -41,3 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: TerrainTop
+    uniqueID: 3632960409
+    locked: 0
+  - name: TerrainBot
+    uniqueID: 1683526251
+    locked: 0

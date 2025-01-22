@@ -7,9 +7,12 @@ using TMPro;
 
 public class GridHandler : MonoBehaviour
 {
+    public TMP_Dropdown dropdown;
+    private float loadTime;
     private GameObject gridBlock;
     List<GameObject> gridBlocks;
     List<string> stringList;
+    List<Vector3> positionList;
     private int gridSize, gridLimit, gridMinimum, randomAttempts;
     private Vector3 blockSpawnPos;
     private bool isReady, isDone;
@@ -19,14 +22,15 @@ public class GridHandler : MonoBehaviour
         gridBlock = Resources.Load("GridBlock") as GameObject;
         gridBlocks = new List<GameObject>();
         stringList = new List<string>();
+        positionList = new List<Vector3>();
     }
     void Start()
-    {
-        Debug.Log(gridSizeInput);
+    { 
+        loadTime=0;
         randomAttempts = 0;
         isDone = false;
         isReady = false;
-        gridLimit = 20;
+        gridLimit = 0;
         if(gridBlock == null){
             gridBlock = Resources.Load("GridBlock.prefab") as GameObject;
         }
@@ -37,19 +41,21 @@ public class GridHandler : MonoBehaviour
     {
         // Control for CreateGrid
         if(isReady){
+            loadTime += Time.deltaTime;
             for(int i = 0; i <= gridLimit; i++){
                 GameObject block = GameObject.Instantiate(gridBlock, blockSpawnPos, transform.rotation, gameObject.transform);
                 Debug.Log(i);
                 gridBlocks.Add(block);
                 DistributeBlocks(gridBlocks,i);
                 if(i >= gridLimit){
+                    //Debug.Log("Load Time:" + loadTime +"s");
+                    //debugText.GetComponent<Text>().text = positionList[i].ToString();
                     isDone = true;
                     isReady = false;
                 }
             }
         }
     }
-
     public void CreateGrid()
     {
         if(isReady == false && isDone == false){
@@ -58,12 +64,15 @@ public class GridHandler : MonoBehaviour
     }
     public void Reset()
     {
-        gridBlocks = new List<GameObject>();
+        stringList.Clear();
+        gridBlocks.Clear();
+        gridLimit = 0;
         isDone = false;
+        gridSizeInput.GetComponent<TMP_InputField>().text= "";
     }
     public void ChangeSize()
     {
-        Debug.Log(gridSizeInput.GetComponent<TMP_InputField>().text);
+       // Takes input text and adds to string list for parsing
         stringList.Add(gridSizeInput.GetComponent<TMP_InputField>().text);
         int size = 0;
         int[] numArr = new int[stringList.Count];
@@ -71,7 +80,7 @@ public class GridHandler : MonoBehaviour
             numArr[i]=int.Parse(string.Join("",stringList[i]));
             size = numArr[i];
         }
-        Debug.Log(size);
+        //Debug.Log(size);
         gridLimit = size;
     }
     private void DistributeBlocks(List<GameObject> blockList, int index)
@@ -79,11 +88,39 @@ public class GridHandler : MonoBehaviour
         // Default first block to center
         if(index == 0){
             blockList[index].transform.position = new Vector3(0,0,0);
+            positionList.Add(blockList[index].transform.parent.position);
+            
         }
         if(index > 0){
-            // Parent Selection Scope Allows Randomized Path Generation
-            // Can remove parent from statement and add functionality for squared grid
-            blockList[index].transform.parent.position += (randomPosition())/2;
+            // Set random block position as modifier for Grid Handler
+            Vector3 blockPos = randomPosition();
+            // Loop through block list and compare block positions to v3 list positions
+            for(int i = 0; i < index; i++){
+                foreach(Vector3 v3 in positionList){
+                    // If would be overlapping - Do something
+                    if(blockList[index].transform.parent.position + blockPos == v3){
+                        bool isOverlap = true;
+                        // Reset Position to prevent overlap
+                        Debug.Log("Overlap Occurred - Repositioning");         
+                        do{
+                            blockPos = randomPosition();
+                            if(blockList[index].transform.parent.position + blockPos != v3){
+                                isOverlap = false;
+                                break;
+                            }
+                            }while(isOverlap);
+                    } else if(blockList[index].transform.parent.position + blockPos != v3){
+                        // If position not taken move handler
+                        Debug.Log("No Overlap - Tile Placed");
+                        continue;
+                    }  
+                }
+             }
+            // Setting sta after loop for each block
+            blockList[index].transform.parent.position += (blockPos);
+            blockList[index].GetComponent<GridBlock>().setRotation(blockPos);
+            positionList.Add(blockList[index].transform.parent.position); 
+              
         }
     }
     private Vector3 randomPosition(){
@@ -100,6 +137,34 @@ public class GridHandler : MonoBehaviour
         }
         // Add Control for forcing vertical and horizontal placement only (Exclude diagonals)
         // If x&y != 0 random 1-2 if1thenx0 if2theny0
+        if(x != 0 && y != 0){
+            int shuffle = Random.Range(1,3);
+            if(shuffle == 1){
+                x = 0;
+            } else if(shuffle == 2){
+                y=0;
+            }
+        } 
         return new Vector3(x,y,0);
+    }
+
+    public void MapColor(){
+        switch(dropdown.value){
+        case 0:
+        foreach(GameObject block in gridBlocks){
+            block.GetComponent<SpriteRenderer>().color = Color.green;
+        }
+        break;
+        case 1:
+        foreach(GameObject block in gridBlocks){
+            block.GetComponent<SpriteRenderer>().color = Color.magenta;
+        }
+        break;
+        case 2:
+        foreach(GameObject block in gridBlocks){
+            block.GetComponent<SpriteRenderer>().color = Color.blue;
+        }
+        break;
+        }
     }
 }

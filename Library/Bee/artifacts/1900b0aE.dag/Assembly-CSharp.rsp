@@ -375,6 +375,8 @@
 "Assets/Scripts/CameraControl.cs"
 "Assets/Scripts/GridBlock.cs"
 "Assets/Scripts/GridHandler.cs"
+"Assets/Scripts/PlayerControl.cs"
+"Assets/Scripts/SpawnableObjects.cs"
 -langversion:9.0
 /deterministic
 /optimize+
